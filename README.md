@@ -97,8 +97,9 @@ Text flow diagram:
   - Where in code: `js/charts.js`, `createElementNS('http://www.w3.org/2000/svg', ...)`.
 
 ### Bonus
-- Hosted access works
-  - How to demonstrate: open hosted URL and complete login -> profile -> logout flow.
+- Hosted access works  
+  - Hosted URL: [View Project](https://software-sappho.github.io/graphql/)  
+  - How to demonstrate: open hosted URL and complete login → profile → logout flow.
 
 ## GraphiQL Verification Guide
 - GraphiQL URL: `https://platform.zone01.gr/graphiql`
