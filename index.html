@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zone01 GraphQL Propaganda Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=PT+Serif:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="paper-texture" aria-hidden="true"></div>
+  <button id="theme-toggle" class="ghost-btn global-theme-toggle" type="button">Dark Mode</button>
+
+  <main class="app-shell">
+    <section id="login-view" class="login-view">
+      <aside class="poster-panel">
+        <p class="poster-kicker">Zone01 Athens Division</p>
+        <h1>Report Your Progress</h1>
+        <p class="poster-copy">GraphQL-powered dashboard for XP, audits, and skill strength.</p>
+      </aside>
+
+      <section class="login-panel">
+        <h2>Comrade Authentication</h2>
+        <p class="panel-subtitle">Use your Zone01 email/username to login.</p>
+
+        <form id="login-form" class="login-form" novalidate>
+          <label for="username">Username or Email</label>
+          <input id="username" name="username" type="text" autocomplete="username" required />
+
+          <label for="password">Password</label>
+          <div class="password-row">
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+            <button id="toggle-password" type="button" class="ghost-btn" aria-label="Show password">Show</button>
+          </div>
+
+          <p id="login-error" class="status error" role="alert" hidden></p>
+          <p id="login-info" class="status" hidden></p>
+
+          <button id="login-button" type="submit" class="primary-btn">Log In</button>
+        </form>
+      </section>
+    </section>
+
+    <section id="profile-view" class="profile-view" hidden>
+      <header class="dash-header">
+        <div>
+          <p class="poster-kicker">Zone01 Personal File</p>
+          <h2 id="headline-user">Student Profile</h2>
+        </div>
+        <div class="header-actions">
+          <label for="xp-range" class="range-label">XP Range</label>
+          <select id="xp-range" class="range-select">
+            <option value="30">30 days</option>
+            <option value="90" selected>90 days</option>
+            <option value="180">180 days</option>
+            <option value="365">365 days</option>
+          </select>
+          <button id="download-json" class="ghost-btn" type="button">Download JSON</button>
+          <button id="logout-button" class="primary-btn" type="button">Logout</button>
+        </div>
+      </header>
+
+      <p id="profile-status" class="status" hidden></p>
+
+      <section id="dashboard-grid" class="dashboard-grid" hidden>
+        <article class="card identity-card">
+          <h3>Identity</h3>
+          <dl>
+            <div><dt>Name</dt><dd id="user-name">-</dd></div>
+            <div><dt>Username</dt><dd id="user-login">-</dd></div>
+            <div><dt>Email</dt><dd id="user-email">-</dd></div>
+          </dl>
+        </article>
+
+        <article class="card xp-card">
+          <h3>Total XP</h3>
+          <p id="xp-total" class="hero-number">0</p>
+          <p class="muted">division: div-01</p>
+          <div id="xp-line-chart" class="chart-wrap" aria-label="XP timeline chart"></div>
+        </article>
+
+        <article class="card audit-card">
+          <h3>Audit Balance</h3>
+          <div id="audit-donut-chart" class="chart-wrap" aria-label="Audit donut chart"></div>
+          <p class="audit-ratio">Ratio <span id="audit-ratio">0.00</span></p>
+          <div class="pair-grid">
+            <p>Done <span id="audit-up">0</span></p>
+            <p>Received <span id="audit-down">0</span></p>
+          </div>
+        </article>
+
+        <article class="card projects-card">
+          <h3>Last 5 Projects</h3>
+          <ul id="last-projects" class="project-list"></ul>
+        </article>
+
+        <article class="card skills-card">
+          <h3>Top Skills</h3>
+          <ul id="skills-list" class="skills-list"></ul>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
