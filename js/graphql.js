@@ -135,11 +135,38 @@ const LATEST_PROJECTS_QUERY = `
   }
 `
 
+const TOTAL_XP_QUERY = `
+  query TotalXP {
+    transaction_aggregate(
+      where: {
+        type: { _eq: "xp" }
+        event: { path: { _ilike: "%/div-01" } }
+      }
+    ) {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+  }
+`
+
+async function getTotalXP(token) {
+  const result = await graphqlRequest(TOTAL_XP_QUERY, {}, token)
+  const totalXP = result.transaction_aggregate?.aggregate?.sum?.amount || 0
+
+  return {
+    total: totalXP,
+    transactions: []
+  }
+}
+
 // Execute all queries used by the active dashboard.
 export async function getDashboardData(token, daysRange) {
   const from = new Date(Date.now() - Number(daysRange) * 24 * 60 * 60 * 1000).toISOString()
 
-  const [userRes, xpRes, auditRes, skillsRes, latestRes] = await Promise.all([
+  const [userRes, xpRes, auditRes, skillsRes, latestRes, totalXpRes] = await Promise.all([
     // [AUDIT] Used by app: normal query execution.
     graphqlRequest(USER_QUERY, {}, token),
     // [AUDIT] Used by app: arguments query execution (XP timeline).
@@ -149,7 +176,8 @@ export async function getDashboardData(token, daysRange) {
     // [AUDIT] Used by app: arguments query execution (skills).
     graphqlRequest(SKILLS_QUERY, { limit: 5 }, token),
     // [AUDIT] Used by app: nested query execution (latest projects).
-    graphqlRequest(LATEST_PROJECTS_QUERY, { limit: 5 }, token)
+    graphqlRequest(LATEST_PROJECTS_QUERY, { limit: 5 }, token),
+    getTotalXP(token)
   ])
 
   const user = userRes.user?.[0] || {}
@@ -157,7 +185,7 @@ export async function getDashboardData(token, daysRange) {
 
   const xpRows = xpRes.transaction || []
   const dailyXP = groupXPByDay(xpRows)
-  const totalXP = xpRows.reduce((sum, row) => sum + (row.amount || 0), 0)
+  const totalXP = totalXpRes.total
   const topProjects = projectTotals(xpRows).slice(0, 5)
 
   const up = auditRes.audit_up?.aggregate?.sum?.amount || 0
